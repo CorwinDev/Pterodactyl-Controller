@@ -27,47 +27,47 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        await interaction.deferReply({ ephemeral: false }).catch(() => {});
+        await interaction.deferReply({ ephemeral: false }).catch(() => { });
 
 
-    const linkJson = require('../../link.json');
-    
-    var serverId = args[0];
-    const Command = args[1]
+        const linkJson = require('../../link.json');
 
-    var helpEmbed = new discord.MessageEmbed()
-        .setTitle(`Voorbeeld - Send`)
-        .setColor("#F9914F")
-        .setDescription(`-send <ServerId> <Command>`)
+        var serverId = args[0];
+        const Command = args[1]
 
-    if(!serverId) return interaction.followUp(helpEmbed);
-    if(!Command) return interaction.followUp(helpEmbed);
-    
-    if(!linkJson[interaction.user.id]) return interaction.followUp("Je moet je account even koppelen aan de bot!\n-link");
+        var helpEmbed = new discord.MessageEmbed()
+            .setTitle(`Voorbeeld - Send`)
+            .setColor("#F9914F")
+            .setDescription(`-send <ServerId> <Command>`)
 
+        if (!serverId) return interaction.followUp(helpEmbed);
+        if (!Command) return interaction.followUp(helpEmbed);
 
-
-    var userApi = linkJson[interaction.user.id]["userapi"];
-    var hostname = client.config.panelurl;
-
-    let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
-
-    client1.sendServerCommand(serverId, Command).then((response) => {
-        console.log(response)
-
-        interaction.followUp(`Je heb succesvol een command verzonden naar: **${serverId}**\nCommand: ${Command}`);
-
-    }).catch((error) => {
-        console.log(error);
-
-        var errorMessage = new discord.MessageEmbed()
-            .setTitle(`Error`)
-            .setColor(`#F9914F`)
-            .setDescription(`Er is iets mis!`)
-
-            interaction.followUp({embeds:[errorMessage]});
-    });
+        if (!linkJson[interaction.user.id]) return interaction.followUp("Je moet je account even koppelen aan de bot!\n-link");
 
 
-}
+
+        var userApi = linkJson[interaction.user.id]["userapi"];
+        var hostname = client.config.panelurl;
+
+        let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
+
+        client1.sendServerCommand(serverId, Command).then((response) => {
+            console.log(response)
+
+            interaction.followUp(`Je heb succesvol een command verzonden naar: **${serverId}**\nCommand: ${Command}`);
+
+        }).catch((error) => {
+            console.log(error);
+
+            var errorMessage = new discord.MessageEmbed()
+                .setTitle(`Error`)
+                .setColor(`#F9914F`)
+                .setDescription(`Er is iets mis!`)
+
+            interaction.followUp({ embeds: [errorMessage] });
+        });
+
+
+    }
 }

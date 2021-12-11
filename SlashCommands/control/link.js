@@ -1,7 +1,7 @@
 const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 const linkJson = require('../../link.json');
 const fs = require('fs');
-const Nodeactyl =  require('nodeactyl')
+const Nodeactyl = require('nodeactyl')
 module.exports = {
     name: "link",
     description: "Link your api code with our panel",
@@ -21,55 +21,55 @@ module.exports = {
      * @param {String[]} args
      */
     run: async (client, interaction, args) => {
-        await interaction.deferReply({ ephemeral: true }).catch(() => {});
+        await interaction.deferReply({ ephemeral: true }).catch(() => { });
         var userID = interaction.user.id;
         var userApi = args[0];
-    
+
         var helpEmbed = new MessageEmbed()
             .setTitle(`Example - /link`)
             .setColor("#F9914F")
             .setDescription(`/link <Api key>`)
-    
-        if(!userApi) return interaction.followUp({embeds: [helpEmbed]});
-    
+
+        if (!userApi) return interaction.followUp({ embeds: [helpEmbed] });
+
         if (!linkJson[userID]) {
             linkJson[userID] = {
                 userapi: false
             }
         }
-    
+
         linkJson[userID].userapi = userApi;
         var hostname = client.config.panelurl
         let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
         // console.log(JSON.stringify(linkJson));
         client1.getAccountDetails().then((response1) => {
-            fs.writeFile("./link.json", JSON.stringify(linkJson), function(err) {
-                if(err) {
-        
+            fs.writeFile("./link.json", JSON.stringify(linkJson), function (err) {
+                if (err) {
+
                     var errorEmbed = new MessageEmbed()
                         .setTitle(`Link Error!`)
                         .setDescription(`There is something wrong, please contact the staff team`)
                         .setColor(`#F9914F`)
-                    interaction.followUp({embeds: [errorEmbed]});            
-        
+                    interaction.followUp({ embeds: [errorEmbed] });
+
                     console.log(err);
                 }
-                if(!err) {
+                if (!err) {
                     var successEmbed = new MessageEmbed()
                         .setTitle(`Account linked!`)
                         .setDescription(`You are connect with user: ${response1.username}`)
                         .setColor(`#F9914F`)
-                        interaction.followUp({ embeds: [successEmbed]});
+                    interaction.followUp({ embeds: [successEmbed] });
                 }
             });
         }).catch((error) => {
             console.log(error)
             var errorEmbed = new MessageEmbed()
-            .setTitle(`Link Error!`)
-            .setDescription(`There is something wrong, please contact the staff team\nThis ussualy is because your apikey is invalid`)
-            .setColor(`#F9914F`)
-            interaction.followUp({embeds: [errorEmbed]})
+                .setTitle(`Link Error!`)
+                .setDescription(`There is something wrong, please contact the staff team\nThis ussualy is because your apikey is invalid`)
+                .setColor(`#F9914F`)
+            interaction.followUp({ embeds: [errorEmbed] })
         })
-        
+
     }
 }
