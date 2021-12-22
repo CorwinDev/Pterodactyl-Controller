@@ -9,7 +9,7 @@ client.on("interactionCreate", async (interaction) => {
 
         const cmd = client.slashCommands.get(interaction.commandName);
         if (!cmd)
-            return interaction.followUp({ content: "An error has occured " });
+            return interaction.reply({ content: "An error has occured " });
 
         const args = [];
 
@@ -82,10 +82,10 @@ client.on("interactionCreate", async (interaction) => {
                     const button4 = new MessageButton()
                         .setCustomId("Restart")
                         .setStyle("SECONDARY")
-                        .setLabel("restart")
+                        .setLabel("Restart")
                     const row = new MessageActionRow()
                         .addComponents(button, button2, button3, button4);
-                    usage.setDescription(`Hier is je usage van **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetworkMB recieved:${myArr3}, NetworkMB verzonden:${myArr4}`)
+                    usage.setDescription(`Here is you usage of: **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetworkMB recieved:${myArr3}, NetworkMB send:${myArr4}`)
                     var messagee = await interaction.followUp({ components: [row], embeds: [usage] });
 
 
@@ -168,7 +168,7 @@ client.on("interactionCreate", async (interaction) => {
                                 var errorMessage = new MessageEmbed()
                                     .setTitle(`Error`)
                                     .setColor(`#F9914F`)
-                                    .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
+                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
 
                                 interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
                             });
@@ -186,9 +186,11 @@ client.on("interactionCreate", async (interaction) => {
                                 var errorMessage = new MessageEmbed()
                                     .setTitle(`Error`)
                                     .setColor(`#F9914F`)
-                                    .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
+                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
 
                                 interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
+                                client.hook.error(error)
+
                             });
                         } else if (i.customId === "start") {
                             client1.startServer(serverId).then((response) => {
@@ -204,9 +206,11 @@ client.on("interactionCreate", async (interaction) => {
                                 var errorMessage = new MessageEmbed()
                                     .setTitle(`Error`)
                                     .setColor(`#F9914F`)
-                                    .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
+                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
 
                                 interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
+                                client.hook.error(error)
+
                             });
                         } else if (i.customId === "kill") {
                             client1.stopServer(serverId).then((response) => {
@@ -216,15 +220,17 @@ client.on("interactionCreate", async (interaction) => {
                                     .setDescription(`You succesfully stopped the server!`)
                                 interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
+
                             }).catch((error) => {
-                                console.log(error);
 
                                 var errorMessage = new MessageEmbed()
                                     .setTitle(`Error`)
                                     .setColor(`#F9914F`)
-                                    .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
+                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
 
                                 interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
+                                client.hook.error(error)
+
                             });
 
                         }
@@ -242,6 +248,8 @@ client.on("interactionCreate", async (interaction) => {
 
             }).catch((error) => {
                 console.log(error)
+                client.hook.error(error)
+
             })
         }
     }

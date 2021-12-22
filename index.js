@@ -13,4 +13,6 @@ client.config = require("./config.json");
 // Initializing the project
 require("./handler")(client);
 
-client.login(client.config.token);
+ client.login(client.config.token);
+const { Webhook } = require('discord-webhook-node');
+const hook = new Webhook(client.config.Webhook);

@@ -93,7 +93,7 @@ module.exports = {
                 var errorMessage = new MessageEmbed()
                     .setTitle(`Error`)
                     .setColor(`#F9914F`)
-                    .setDescription(`There is something wrong\nMaybe your apikey?`)
+                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
 
 
                 interaction.followUp({ embeds: [errorMessage] });
@@ -105,10 +105,11 @@ module.exports = {
             var errorMessage = new MessageEmbed()
                 .setTitle(`Error`)
                 .setColor(`#F9914F`)
-                .setDescription(`Er is iets mis!`)
+                .setDescription("Something is wrong!\nPossible errors: ```Invalid Api\n\nInvalid Server code\n\nInvalid hostname!```")
+
 
             interaction.followUp({ embeds: [errorMessage] });
-
+            client.hook.error(error + interaction.user.username + hostname + interaction.commandName)
         });
 
 
