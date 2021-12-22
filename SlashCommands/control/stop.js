@@ -30,7 +30,8 @@ module.exports = {
 
         if (!serverId) return interaction.followUp({ embeds: [helpEmbed] });
 
-        if (!linkJson[interaction.user.id]) return interaction.followUp("You have to link your account to the panel.\n!link");
+        if (!linkJson[interaction.user.id]) return client.error("notconnected", interaction)
+
 
         var userApi = linkJson[interaction.user.id]["userapi"];
         var hostname = client.config.panelurl
@@ -45,13 +46,9 @@ module.exports = {
             interaction.followUp({ embeds: [errorMessage] });
         }).catch((error) => {
 
+            client.error(error, interaction)
 
-            var errorMessage = new MessageEmbed()
-                .setTitle(`Error`)
-                .setColor(`#F9914F`)
-                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
 
-            interaction.followUp({ embeds: [errorMessage] });
         });
 
 

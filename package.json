@@ -1,17 +1,60 @@
 {
-  "name": "pterocord",
-  "version": "1.0.0",
-  "description": "",
+  "name": "pterodactyl-controller",
+  "version": "1.0.1",
+  "description": "Pterodactyl Control bot for discord",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "brace-expansion": "^1.1.11",
+    "axios": "^0.22.0",
+    "asynckit": "^0.4.0",
+    "balanced-match": "^1.0.2",
+    "callsites": "^3.1.0",
+    "concat-map": "^0.0.1",
+    "delayed-stream": "^1.0.0",
+    "combined-stream": "^1.0.8",
     "discord-webhook-node": "^1.1.8",
-    "discord.js": "^13.2.0",
-    "glob": "^7.1.7",
-    "nodeactyl": "^3.2.1"
-  }
+    "discord.js": "^13.3.1",
+    "discord-api-types": "^0.24.0",
+    "dot-prop": "^6.0.1",
+    "follow-redirects": "^1.14.6",
+    "form-data": "^3.0.1",
+    "glob": "^7.2.0",
+    "fs.realpath": "^1.0.0",
+    "is-obj": "^2.0.0",
+    "inflight": "^1.0.6",
+    "inherits": "^2.0.4",
+    "lodash.isequal": "^4.5.0",
+    "mime-db": "^1.51.0",
+    "minimatch": "^3.0.4",
+    "mime-types": "^2.1.34",
+    "ow": "^0.27.0",
+    "path-is-absolute": "^1.0.1",
+    "ts-mixer": "^6.0.0",
+    "tslib": "^2.3.1",
+    "vali-date": "^1.0.0",
+    "nodeactyl": "^3.2.1",
+    "type-fest": "^1.4.0",
+    "wrappy": "^1.0.2",
+    "once": "^1.4.0",
+    "ws": "^8.3.0",
+    "node-fetch": "^2.6.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CorwinDev/Pterodactyl-Controller.git"
+  },
+  "keywords": [
+    "Discord",
+    "Pterodactyl"
+  ],
+  "author": "CorwinDev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CorwinDev/Pterodactyl-Controller/issues"
+  },
+  "homepage": "https://github.com/CorwinDev/Pterodactyl-Controller#readme"
 }

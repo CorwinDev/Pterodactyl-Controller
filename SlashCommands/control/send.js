@@ -43,7 +43,8 @@ module.exports = {
         if (!serverId) return interaction.followUp(helpEmbed);
         if (!Command) return interaction.followUp(helpEmbed);
 
-        if (!linkJson[interaction.user.id]) return interaction.followUp("Je moet je account even koppelen aan de bot!\n-link");
+        if (!linkJson[interaction.user.id]) return client.error("notconnected", interaction)
+
 
 
 
@@ -58,14 +59,9 @@ module.exports = {
             interaction.followUp(`Je heb succesvol een command verzonden naar: **${serverId}**\nCommand: ${Command}`);
 
         }).catch((error) => {
-            console.log(error);
 
-            var errorMessage = new discord.MessageEmbed()
-                .setTitle(`Error`)
-                .setColor(`#F9914F`)
-                .setDescription(`Er is iets mis!`)
+            client.error(error, interaction)
 
-            interaction.followUp({ embeds: [errorMessage] });
         });
 
 

@@ -22,7 +22,7 @@ module.exports = {
     run: async (client, interaction, args) => {
         if (!linkJson[interaction.user.id]) {
             interaction.deferReply({ ephemeral: false }).catch(() => { });
-            return interaction.reply("You aren't connected to our panel please connect with:\n/link",);
+            return client.error("notconnected", interaction)
         }
 
         var userApi = linkJson[interaction.user.id]["userapi"];
@@ -154,14 +154,10 @@ module.exports = {
                             interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
                         }).catch((error) => {
-                            console.log(error);
 
-                            var errorMessage = new MessageEmbed()
-                                .setTitle(`Error`)
-                                .setColor(`#F9914F`)
-                                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
+                            client.error(error, interaction, true)
 
-                            interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
+            
                         });
                     } else if (i.customId === "stop") {
                         client1.stopServer(serverId).then((response) => {
@@ -172,14 +168,9 @@ module.exports = {
                             interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
                         }).catch((error) => {
-                            console.log(error);
+                            client.error(error, interaction, true)
 
-                            var errorMessage = new MessageEmbed()
-                                .setTitle(`Error`)
-                                .setColor(`#F9914F`)
-                                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
-
-                            interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
+                         
                         });
                     } else if (i.customId === "start") {
                         client1.startServer(serverId).then((response) => {
@@ -190,14 +181,8 @@ module.exports = {
                             interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
                         }).catch((error) => {
-                            console.log(error);
+                            client.error(error, interaction, true)
 
-                            var errorMessage = new MessageEmbed()
-                                .setTitle(`Error`)
-                                .setColor(`#F9914F`)
-                                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
-
-                            interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
                         });
                     } else if (i.customId === "kill") {
                         client1.stopServer(serverId).then((response) => {
@@ -208,14 +193,8 @@ module.exports = {
                             interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
                         }).catch((error) => {
-                            console.log(error);
+                            client.error(error, interaction, true)
 
-                            var errorMessage = new MessageEmbed()
-                                .setTitle(`Error`)
-                                .setColor(`#F9914F`)
-                                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
-
-                            interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
                         });
 
                     }
@@ -232,7 +211,8 @@ module.exports = {
             });
 
         }).catch((error) => {
-            console.log(error)
+            client.error(error, interaction)
+            
         })
     }
 }

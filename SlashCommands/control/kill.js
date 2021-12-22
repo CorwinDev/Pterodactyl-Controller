@@ -25,34 +25,30 @@ module.exports = {
         var serverId = args[0];
         var helpEmbed = new MessageEmbed()
             .setTitle(`Example - Kill`)
-            .setColor("#F9914F")
+            .setColor(client.config.embed.default)
             .setDescription(`/kill <ServerId>`)
 
         if (!serverId) return interaction.followUp({ embeds: [helpEmbed] });
 
-        if (!linkJson[interaction.user.id]) return interaction.followUp("You have to link your account to the panel.\n!link");
+        if (!linkJson[interaction.user.id]) return client.error("notconnected", interaction)
+
 
         var userApi = linkJson[interaction.user.id]["userapi"];
         var hostname = client.config.panelurl
-
+ 
         let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
 
         client1.killServer(serverId).then((response) => {
-            var errorMessage = new MessageEmbed()
+            var embed = new MessageEmbed()
                 .setTitle(`Kill`)
-                .setColor(`#F9914F`)
+                .setColor(client.config.embed.default)
                 .setDescription(`You succesfully Killed the server!`)
 
-            interaction.followUp({ embeds: [errorMessage] });
+            interaction.followUp({ embeds: [embed] });
         }).catch((error) => {
 
+            client.error(error, interaction)
 
-            var errorMessage = new MessageEmbed()
-                .setTitle(`Error`)
-                .setColor(`#F9914F`)
-                .setDescription(`Something is wrong!\nPossible errors: Invalid Api, Invalid Server code, Invalid hostname!`)
-
-            interaction.followUp({ embeds: [errorMessage] });
         });
 
 

@@ -27,7 +27,7 @@ module.exports = {
 
         var helpEmbed = new MessageEmbed()
             .setTitle(`Example - /link`)
-            .setColor("#F9914F")
+            .setColor(client.config.embed.default)
             .setDescription(`/link <Api key>`)
 
         if (!userApi) return interaction.followUp({ embeds: [helpEmbed] });
@@ -52,7 +52,7 @@ module.exports = {
                         .setColor(`#F9914F`)
                     interaction.followUp({ embeds: [errorEmbed] });
 
-                    console.log(err);
+                    client.hook.warn(err)
                 }
                 if (!err) {
                     var successEmbed = new MessageEmbed()
@@ -63,12 +63,9 @@ module.exports = {
                 }
             });
         }).catch((error) => {
-            console.log(error)
-            var errorEmbed = new MessageEmbed()
-                .setTitle(`Link Error!`)
-                .setDescription(`There is something wrong, please contact the staff team\nThis ussualy is because your apikey is invalid`)
-                .setColor(`#F9914F`)
-            interaction.followUp({ embeds: [errorEmbed] })
+
+            client.error(error, interaction)
+
         })
 
     }
