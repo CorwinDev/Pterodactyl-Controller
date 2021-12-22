@@ -26,11 +26,11 @@ module.exports = {
         var datetime = `${Day}/${Month}/${Year}`;
 
 
-        if (!linkJson[interaction.user.id]) return interaction.followUp("You aren't connected to our panel please connect with:\n/link");
+        if (!linkJson[interaction.user.id]) return client.error("notconnected", interaction) 
 
         var userApi = linkJson[interaction.user.id]["userapi"];
         var hostname = client.config.panelurl;
-
+        if(!userApi) return errors("notconnected", interaction) 
         let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
 
         client1.getAllServers().then((response1) => {
@@ -73,11 +73,11 @@ module.exports = {
                     menu.addOptions([
                         {
                             label: response2[i]["attributes"]["name"],
-                            description: 'This is a description',
+                            description: response2[i]["attributes"]["identifier"],
                             value: response2[i]["attributes"]["identifier"],
                         }
                         ,])
-                    var addServer = `*Je bent:* ${you_are}\n*Status:* ${is_suspended}\n*Link:* ${hostname}/server/${response2[i]["attributes"]["identifier"]}\n\n`;
+                    var addServer = `*You are:* ${you_are}\n*Status:* ${is_suspended}\n*Link:* ${hostname}/server/${response2[i]["attributes"]["identifier"]}\n\n`;
                     embed.addField(`*Server:* ${response2[i]["attributes"]["name"]}`, addServer, true)
                     allServers += `${addServer}\n`
 
@@ -88,28 +88,14 @@ module.exports = {
                 interaction.followUp({ embeds: [embed], components: [row] });
 
             }).catch((error) => {
-                console.log(error);
+                client.error(error, interaction)
 
-                var errorMessage = new MessageEmbed()
-                    .setTitle(`Error`)
-                    .setColor(`#F9914F`)
-                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
-
-
-                interaction.followUp({ embeds: [errorMessage] });
             });
 
         }).catch((error) => {
-            console.log(error);
-
-            var errorMessage = new MessageEmbed()
-                .setTitle(`Error`)
-                .setColor(`#F9914F`)
-                .setDescription("Something is wrong!\nPossible errors: ```Invalid Api\n\nInvalid Server code\n\nInvalid hostname!```")
+            client.error(error, interaction)
 
 
-            interaction.followUp({ embeds: [errorMessage] });
-            client.hook.error(error + interaction.user.username + hostname + interaction.commandName)
         });
 
 

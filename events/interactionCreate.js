@@ -9,7 +9,8 @@ client.on("interactionCreate", async (interaction) => {
 
         const cmd = client.slashCommands.get(interaction.commandName);
         if (!cmd)
-            return interaction.reply({ content: "An error has occured " });
+            return client.error("cmdnotexist", interaction)
+
 
         const args = [];
 
@@ -32,17 +33,19 @@ client.on("interactionCreate", async (interaction) => {
 
             if (!linkJson[interaction.user.id]) {
                 interaction.deferReply({ ephemeral: false }).catch(() => { });
-                return interaction.reply("You aren't connected to our panel please connect with:\n/link",);
+                return client.error("notconnected", interaction);
             }
 
             var userApi = linkJson[interaction.user.id]["userapi"];
             var hostname = client.config.panelurl;
             interaction.deferReply({ ephemeral: false }).catch(() => { });
+            if (!userApi) return client.error("notconnected", interaction);
+
             const serverId = interaction.values[0]
             let client1 = new Nodeactyl.NodeactylClient(hostname, userApi);
             var usage = new MessageEmbed()
                 .setTitle(`Usage`)
-                .setColor(`#F9914F`)
+                .setColor(client.config.embed.default)
             client1.getServerUsages(interaction.values[0]).then(async (response) => {
                 var ram = (response.resources.memory_bytes / 1000000);
                 var ram2 = ram.toString()
@@ -60,7 +63,7 @@ client.on("interactionCreate", async (interaction) => {
                 var tx = (response.resources.network_tx_bytes / 1000000);
                 var tx2 = tx.toString()
 
-                var myArr4 = tx2.split(',');
+                var myArr4 = tx2.split('.');
 
                 var cpu = response.resources.cpu_absolute
 
@@ -85,8 +88,8 @@ client.on("interactionCreate", async (interaction) => {
                         .setLabel("Restart")
                     const row = new MessageActionRow()
                         .addComponents(button, button2, button3, button4);
-                    usage.setDescription(`Here is you usage of: **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetworkMB recieved:${myArr3}, NetworkMB send:${myArr4}`)
-                    var messagee = await interaction.followUp({ components: [row], embeds: [usage] });
+                    usage.setDescription(`Here is you usage of: **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetwork recieved: ${myArr3[0]}MB, Network send: ${myArr4[0]}MB`)
+                    await interaction.followUp({ components: [row], embeds: [usage] });
 
 
                 }
@@ -113,8 +116,8 @@ client.on("interactionCreate", async (interaction) => {
                         .setDisabled(true)
                     const row = new MessageActionRow()
                         .addComponents(button, button2, button3, button4);
-                    usage.setDescription(`Hier is je usage van **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetworkMB recieved:${myArr3}, NetworkMB verzonden:${myArr4}`)
-                    var messagee = await interaction.followUp({ components: [row], embeds: [usage] });
+                    usage.setDescription(`Here is you usage of **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetwork recieved: ${myArr3[0]}MB, Network send: ${myArr4[0]}MB`)
+                    await interaction.followUp({ components: [row], embeds: [usage] });
 
                 }
                 if (response.current_state === "starting") {
@@ -139,8 +142,8 @@ client.on("interactionCreate", async (interaction) => {
                     const row = new MessageActionRow()
                         .addComponents(button, button2, button3, button4);
 
-                    usage.setDescription(`Hier is je usage van **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetworkMB recieved:${myArr3}, NetworkMB verzonden:${myArr4}`)
-                    var messagee = await interaction.followUp({ components: [row], embeds: [usage] });
+                    usage.setDescription(`Here is you usage of **${interaction.values[0]}**\n${status}\n<:Ram:888667422758957096>: ${myArr[0]}mb\n<:cpu:888668229877239848>: ${cpu}%\nDisk: ${myArr2[0]}mb\nNetwork recieved: ${myArr3[0]}MB, Network verzonden: ${myArr4[0]}MB`)
+                    await interaction.followUp({ components: [row], embeds: [usage] });
 
                 }
                 const buttonx = new MessageButton()
@@ -182,14 +185,8 @@ client.on("interactionCreate", async (interaction) => {
 
                             }).catch((error) => {
                                 console.log(error);
+                                client.error(error, interaction, true)
 
-                                var errorMessage = new MessageEmbed()
-                                    .setTitle(`Error`)
-                                    .setColor(`#F9914F`)
-                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
-
-                                interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
-                                client.hook.error(error)
 
                             });
                         } else if (i.customId === "start") {
@@ -201,15 +198,9 @@ client.on("interactionCreate", async (interaction) => {
                                 interaction.editReply({ embeds: [embedd], content: " ", components: [row1] });
 
                             }).catch((error) => {
-                                console.log(error);
 
-                                var errorMessage = new MessageEmbed()
-                                    .setTitle(`Error`)
-                                    .setColor(`#F9914F`)
-                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
+                                client.error(error, interaction, true)
 
-                                interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
-                                client.hook.error(error)
 
                             });
                         } else if (i.customId === "kill") {
@@ -222,14 +213,8 @@ client.on("interactionCreate", async (interaction) => {
 
 
                             }).catch((error) => {
+                                client.error(error, interaction, true)
 
-                                var errorMessage = new MessageEmbed()
-                                    .setTitle(`Error`)
-                                    .setColor(`#F9914F`)
-                                    .setDescription("Something is wrong!\nPossible errors: ```Invalid Api, Invalid Server code, Invalid hostname!```")
-
-                                interaction.editReply({ embeds: [errorMessage], content: " ", components: [row1] });
-                                client.hook.error(error)
 
                             });
 
@@ -247,8 +232,7 @@ client.on("interactionCreate", async (interaction) => {
                 });
 
             }).catch((error) => {
-                console.log(error)
-                client.hook.error(error)
+                client.error(error, interaction)
 
             })
         }

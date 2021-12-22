@@ -14,5 +14,8 @@ client.config = require("./config.json");
 require("./handler")(client);
 
  client.login(client.config.token);
-const { Webhook } = require('discord-webhook-node');
-const hook = new Webhook(client.config.Webhook);
+client.error = require("./error")
+
+process.on('warning', (warning) => {
+    client.hook.error(warning.message)
+})

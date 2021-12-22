@@ -2,5 +2,9 @@
     "token": "",
     "prefix": "!",
     "panelurl": "https://panel.corefire.nl",
-    "adminapi": ""
+    "Webhook": "",
+    "embed":{
+        "default": "#F9914F",
+        "error": "#ff0000"
+    }
 }
