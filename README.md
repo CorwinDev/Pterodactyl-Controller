@@ -15,3 +15,6 @@ For qeustions or bug reports please join our [Discord](https://discord.gg/k5EnCX
 <br><br><br>
 
 ### Please leave a star and contribute!
+
+SCREENSHOTS:
+![image](https://user-images.githubusercontent.com/88144943/147236479-3d47c08b-f54d-48e5-aa02-f80ccb5e4968.png)
