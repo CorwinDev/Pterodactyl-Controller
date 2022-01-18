@@ -1,3 +1,4 @@
+![](https://img.shields.io/github/downloads/CorwinDev/Pterodactyl-Controller/total)
 # DisActyl--PterodactylControlBot
 
 ## Requirements: node, npm
